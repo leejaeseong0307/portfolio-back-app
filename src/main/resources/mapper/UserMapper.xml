@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.recommand.mapper.UserMapper">	<!-- mapper 인터페이스가 위치하는 경로 -->
+    	<!-- id: mapper 인터페이스에서 선언한 메서드 이름과 같아야 한다. resultType: VO 클래스가 위치하는 경로 -->
+    <select id="getUserList" resultType="com.recommand.vo.UserVo">
+        SELECT * FROM emp	<!-- SQL문 작성 -->
+    </select>
+    
+    <select id="getVisitCnt" resultType="int" parameterType="com.recommand.vo.UserVo">
+        SELECT count(*) FROM bro_visiorscount where bro_id = 'noLogin'	<!-- SQL문 작성 -->
+    </select>
+    
+    <insert id="insertUser" parameterType="com.recommand.vo.UserVo">
+        INSERT INTO tb_user (user_name, user_email, user_password, created_dt, updated_dt, created_by, updated_by)
+        VALUES (#{name}, #{email}, #{password}, now(), now(), #{id}, #{id});
+    </insert>
+
+    <select id="existsByEmail" parameterType="String" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM tb_user WHERE user_email = #{email}
+    </select>
+    
+    <select id="findPasswordById" resultType="String">
+        SELECT user_password FROM tb_user WHERE user_no = #{no}
+    </select>
+    
+    <update id="updateUser" parameterType="String">
+        UPDATE tb_user
+        SET user_name = #{name},
+            user_password = #{password}
+        WHERE user_no = #{no}
+    </update>
+    
+    <delete id="deleteUserById">
+        DELETE FROM tb_user
+        WHERE user_id = #{userId}
+    </delete>
+    
+    <update id="updateFindPassword" parameterType="String">
+        UPDATE tb_user
+        SET user_password = #{password}
+        WHERE user_id = #{userId}
+    </update>
+    
+    <select id="findId" parameterType="com.recommand.vo.UserVo" resultType="com.recommand.vo.UserVo">
+    	SELECT user_id id
+    	FROM tb_user
+    	WHERE user_name = #{name}
+      	AND user_email = #{email}
+    	LIMIT 1
+  </select>
+</mapper>

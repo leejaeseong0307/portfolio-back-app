@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.recommand.mapper.ContMapper">	<!-- mapper 인터페이스가 위치하는 경로 -->
+    	<!-- id: mapper 인터페이스에서 선언한 메서드 이름과 같아야 한다. resultType: VO 클래스가 위치하는 경로 -->
+    
+    <resultMap id="contVoMap" type="com.recommand.vo.ContVo">
+  <result column="contNo" property="contNo"/>
+  <result column="userId" property="userId"/>
+  <result column="contTitle" property="contTitle"/>
+  <result column="contImg" property="contImg"/>
+  <result column="contDetail" property="contDetail"/>
+  <result column="contDel" property="contDel"/>
+  <result column="contAct" property="contAct"/>
+  <result column="contLike" property="contLike"/>
+  <result column="contView" property="contView"/>
+  <result column="createdBy" property="createdBy"/>
+  <result column="updatedBy" property="updatedBy"/>
+  <result column="createdDt" property="createdDt"/>
+  <result column="updatedDt" property="updatedDt"/>
+  <result column="likeCnt" property="likeCnt"/>
+  <result column="likeNo" property="likeNo"/>
+  <result column="likeUserId" property="likeUserId"/>
+  <result column="liked" property="liked"/>
+</resultMap>
+    	
+     <select id="getContentsByPage" resultMap="contVoMap">
+     	select
+			co.cont_no contNo,
+			co.user_id userId,
+			co.cont_title contTitle,
+			co.cont_img contImg,
+			co.cont_detail contDetail,
+			co.cont_del contDel,
+			co.cont_act contAct,
+			co.cont_like contLike,
+			co.cont_view contView,
+			(select count(*) from tb_like li where li.cont_no = co.cont_no) as likeCnt,
+			co.created_by createdBy,
+			co.updated_by updatedBy,
+			co.created_dt createdDt,
+			co.updated_dt updatedDt
+			<if test="myChk != 0">
+				,li2.like_no likeNo
+				,li2.user_id likeUserId
+				,CASE WHEN li2.user_id IS NOT NULL THEN 1 ELSE 0 END AS liked
+			</if>
+			<if test="myChk == 0">
+				<if test="userId !=null and userId != ''">
+					,case when (select count(li3.user_id) from tb_like li3 where li3.cont_no = li2.cont_no AND li3.user_id = #{userId}) > 0 then 1 else 0	end as liked
+				</if>
+			</if>
+			
+		from
+			tb_content co
+		<if test="myChk == 0">
+			LEFT JOIN (select distinct cont_no from tb_like) li2 ON co.cont_no = li2.cont_no	
+		</if>
+		<if test="myChk != 0">
+			JOIN tb_like li2 ON co.cont_no = li2.cont_no	
+		</if>
+		where co.cont_del = 'N'
+		and co.cont_act = 'Y'
+		<if test="myChk != 0">
+			and li2.user_id = #{userId}
+		</if>
+		order by co.created_dt desc
+		LIMIT #{size} OFFSET #{offset}	
+     </select>	
+    	
+    <select id="getUserList" resultType="com.recommand.vo.UserVo">
+        SELECT * FROM emp	<!-- SQL문 작성 -->
+    </select>
+    
+    <select id="getVisitCnt" resultType="int" parameterType="com.recommand.vo.UserVo">
+        SELECT count(*) FROM bro_visiorscount where bro_id = 'noLogin'	<!-- SQL문 작성 -->
+    </select>
+    
+    <insert id="insertUser" parameterType="com.recommand.vo.UserVo">
+        INSERT INTO tb_user (user_name, user_email, user_password, created_dt, updated_dt, created_by, updated_by)
+        VALUES (#{name}, #{email}, #{password}, now(), now(), #{id}, #{id});
+    </insert>
+
+    <select id="existsByEmail" parameterType="String" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM tb_user WHERE user_email = #{email}
+    </select>
+    
+    <insert id="insertLike">
+	  INSERT INTO tb_like (cont_no, user_id)
+	  VALUES (#{contNo}, #{userId})
+	</insert>
+	
+	<delete id="deleteLike">
+	  DELETE FROM tb_like
+	  WHERE cont_no = #{contNo}
+	    AND user_id = #{userId}
+	</delete>
+	
+	<select id="existsLike" resultType="boolean">
+	  SELECT COUNT(*) > 0
+	  FROM tb_like
+	  WHERE cont_no = #{contNo}
+	    AND user_id = #{userId}
+	</select>
+	
+	<insert id="insertContent" parameterType="com.recommand.vo.ContVo">
+    INSERT INTO tb_content (
+      user_id, cont_title, cont_img, cont_detail,
+      cont_del, cont_act, cont_like, cont_view,
+      created_by, updated_by, created_dt, updated_dt
+    ) VALUES (
+      #{userId}, #{contTitle}, #{contImg}, #{contDetail},
+      'N', 'Y', 0, 0,
+      #{createdBy}, #{updatedBy}, NOW(), NOW()
+    )
+  </insert>
+</mapper>
