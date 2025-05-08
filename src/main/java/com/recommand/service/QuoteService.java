@@ -27,7 +27,7 @@ public class QuoteService {
     @Value("${pexels.api.key}")
     private String pexelsApiKey;
 
-    @Value("${image.save.dir:uploads/images}")
+    @Value("${image.save.dir}")
     private String imageSaveDir;
 
     public String requestQuote() throws IOException {
