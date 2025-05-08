@@ -7,7 +7,7 @@
   <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
 
   <!-- log file path -->
-  <property name="LOG_PATH" value="D:\01_business\workspace\Recommend\log"/>
+  <property name="LOG_PATH" value="D:/01_business/workspace/Recommend/log"/>
 <!--   <property name="LOG_PATH" value="/usr/share/apache-tomcat-10.1.19/logs"/> -->
   <!-- log file name -->
   <property name="LOG_FILE_NAME" value="myservice"/>
