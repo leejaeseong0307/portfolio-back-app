@@ -79,7 +79,7 @@ public class QuoteService {
         }
 
         String fileName = UUID.randomUUID() + ".png";
-        String absolutePath = uploadDir.replace("/", "").replace("file:", "");
+        String absolutePath = uploadDir.replace("///", "").replace("file:", "");
         Path savePath = Paths.get(absolutePath, fileName);
         Files.createDirectories(savePath.getParent());
         Files.write(savePath, imageBytes);
