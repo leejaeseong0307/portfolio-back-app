@@ -29,6 +29,9 @@ public class QuoteService {
 
     @Value("${image.save.dir}")
     private String imageSaveDir;
+    
+    @Value("${file.upload-dir}")
+	private String uploadDir;
 
     public String requestQuote() throws IOException {
         //return requestGpt("외국 위인의 명언 하나를 영어 원문과 번역, 인물 이름 포함해서 알려줘.");
@@ -76,7 +79,8 @@ public class QuoteService {
         }
 
         String fileName = UUID.randomUUID() + ".png";
-        Path savePath = Paths.get(imageSaveDir, fileName);
+        String absolutePath = uploadDir.replace("/", "").replace("file:", "");
+        Path savePath = Paths.get(absolutePath, fileName);
         Files.createDirectories(savePath.getParent());
         Files.write(savePath, imageBytes);
 
