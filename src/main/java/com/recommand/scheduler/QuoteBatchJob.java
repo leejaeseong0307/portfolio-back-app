@@ -22,7 +22,7 @@ public class QuoteBatchJob {
         this.contMapper = contMapper;
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void run() throws IOException {
         String rawQuote = quoteService.requestQuote();
 
@@ -46,7 +46,7 @@ public class QuoteBatchJob {
 //      vo.setContDetail(translation);
         vo.setContTitle("- "+title+" -");
         vo.setContDetail(quote);
-        vo.setContImg("http://localhost:8081"+imageUrl);
+        vo.setContImg(imageUrl);
         //vo.setContImg("http://121.125.94.188:8000"+imageUrl);
         vo.setCreatedBy("system");
         vo.setUpdatedBy("system");
