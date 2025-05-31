@@ -18,8 +18,8 @@ public class WebConfig implements WebMvcConfigurer {
         .allowedOrigins(
         		"http://localhost:3000",
         		"http://localhost:8081",
-        	    "https://oolrim.com:8001",            
-        	    "https://www.oolrim.com:8001"
+        	    "https://oolrim.com",            
+        	    "https://www.oolrim.com"
         		)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")
