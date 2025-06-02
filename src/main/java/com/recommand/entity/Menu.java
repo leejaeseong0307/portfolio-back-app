@@ -24,4 +24,7 @@ public class Menu {
 	 	@Column(name = "menu_active", nullable = false)
 	    private String menuActive;
 	 	
+	 	@Column(name = "is_Login", nullable = false)
+	    private int isLogin = 0;
+	 	
 }

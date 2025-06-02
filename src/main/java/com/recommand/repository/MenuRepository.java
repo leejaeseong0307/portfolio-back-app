@@ -8,4 +8,7 @@ import com.recommand.entity.Menu;
 
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 	List<Menu> findAllByMenuActiveOrderByMenuSortAsc(String menuActive);
+	
+	List<Menu> findAllByMenuActiveAndIsLoginOrderByMenuSortAsc(String menuActive, int isLogin);
+	
 }

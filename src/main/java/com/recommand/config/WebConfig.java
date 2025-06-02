@@ -16,10 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로
         .allowedOrigins(
-        		"http://localhost:3000",
-        		"http://localhost:8081",
-        	    "https://oolrim.com",            
-        	    "https://www.oolrim.com"
+        		"http://localhost:3000"
+        		,"http://localhost:8081"
+        	    ,"https://oolrim.com"            
+        	    ,"https://www.oolrim.com"
         		)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")

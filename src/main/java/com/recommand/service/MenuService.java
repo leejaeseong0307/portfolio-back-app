@@ -15,7 +15,11 @@ public class MenuService {
         this.menuRepository = menuRepository;
     }
     
-    public List<Menu> getActiveMenus() {
-        return menuRepository.findAllByMenuActiveOrderByMenuSortAsc("Y");
+    public List<Menu> getActiveMenus(boolean isLogin) {
+    	if(isLogin) {
+    		return menuRepository.findAllByMenuActiveOrderByMenuSortAsc("Y");
+    	}else {
+    		return menuRepository.findAllByMenuActiveAndIsLoginOrderByMenuSortAsc("Y", 1);
+    	}
     }
 }
