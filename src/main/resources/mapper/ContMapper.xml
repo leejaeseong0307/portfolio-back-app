@@ -113,4 +113,56 @@
       #{createdBy}, #{updatedBy}, NOW(), NOW()
     )
   </insert>
+  
+  <insert id="insertLongForm" parameterType="com.recommand.vo.ContVo" useGeneratedKeys="true" keyProperty="longNo" keyColumn="long_no">
+    INSERT INTO tb_content_long (
+      user_id, long_title, long_img, long_detail, long_ganre,
+      long_del, long_act, long_like, long_view,
+      created_by, updated_by, created_dt, updated_dt
+    ) VALUES (
+      #{userId}, #{contTitle}, #{contImg}, #{contDetail}, #{longGanre},
+      'N', 'Y', 0, 0,
+      #{userId}, #{userId}, NOW(), NOW()
+    )
+  </insert>
+  
+  <select id="findById" resultType="com.recommand.vo.ContVo">
+    SELECT 
+    	long_no longNo, 
+    	user_id userId, 
+    	long_title contTitle, 
+    	long_detail contDetail, 
+    	long_ganre longGanre, 
+    	long_img contImg,
+    	created_dt createdDt
+    FROM tb_content_long
+    WHERE long_no = #{id}
+  </select>
+  
+  <select id="selectPagedLongForms" resultType="com.recommand.vo.ContVo">
+    SELECT 
+        long_no AS longNo,
+        long_title AS contTitle,
+        long_img AS contImg,
+        SUBSTRING(long_detail, 1, 100) AS contDetail
+    FROM 
+        tb_content_long
+    ORDER BY created_dt DESC
+    LIMIT #{limit} OFFSET #{offset}
+</select>
+  
+  <update id="updateLongForm" parameterType="com.recommand.vo.ContVo">
+    UPDATE tb_content_long
+    SET
+        long_title = #{contTitle},
+        long_detail = #{contDetail},
+        long_img = #{contImg},
+        long_ganre = #{longGanre}
+<!--         season = #{season} -->
+    WHERE
+        long_no = #{longNo}
+</update>
+  
+  
+  
 </mapper>

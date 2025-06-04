@@ -29,4 +29,9 @@ public class ContVo {
     private String likeUserId;
     private int liked;
     private int likeCnt;
+    
+    private Integer longSeason;
+    private String longGanre;
+    
+    private Long longNo;
 }

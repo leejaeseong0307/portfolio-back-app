@@ -36,4 +36,22 @@ public class ContService {
     public void removeLike(Long contNo, String userId) {
     	contMapper.deleteLike(contNo, userId);
     }
+    
+    public void saveLongForm(ContVo contVo) {
+    	contMapper.insertLongForm(contVo);
+    }
+    
+    public ContVo getLongFormById(Long id) {
+        return contMapper.findById(id);
+    }
+    
+    public List<ContVo> getLongForms(int offset, int limit) {
+        return contMapper.selectPagedLongForms(offset, limit);
+    }
+    
+    public void updateLongForm(ContVo contVo) {
+        contMapper.updateLongForm(contVo);
+    }
+
+
 }

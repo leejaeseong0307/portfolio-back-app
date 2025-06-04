@@ -20,5 +20,13 @@ public interface ContMapper {
     
     void insertContent(ContVo vo);
     
+    void insertLongForm(ContVo vo);
+    
+    ContVo findById(@Param("id") Long id);
+    
+    List<ContVo> selectPagedLongForms(@Param("offset") int offset, @Param("limit") int limit);
+    
+    void updateLongForm(ContVo contVo);
+
 }
 
