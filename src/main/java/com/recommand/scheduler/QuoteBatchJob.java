@@ -30,24 +30,14 @@ public class QuoteBatchJob {
         String title = contentJson.get("title").getAsString();
         String quote = contentJson.get("quote").getAsString();
         
-//        String[] parts = rawQuote.split("\"|");
-//        String quote = parts.length > 1 ? parts[1].trim() : rawQuote;
-//        String author = rawQuote.contains("-") ? rawQuote.split("-")[1].split("\n")[0].trim() : "Unknown";
-//        String translation = rawQuote.split("\n").length > 1 ? rawQuote.split("\n")[1].trim() : "";
-
-        String imagePrompt = quoteService.requestImagePrompt(quote);
-        //String imagePrompt = "";
-        String imageUrl = quoteService.downloadImageFromPexels(imagePrompt);
-        //String imageUrl = "";
+        String imageUrl = quoteService.downloadImageFromPexels(title);
 
         ContVo vo = new ContVo();
         vo.setUserId("system");
-//      vo.setContTitle(quote + " - " + author);
-//      vo.setContDetail(translation);
         vo.setContTitle("- "+title+" -");
         vo.setContDetail(quote);
-        vo.setContImg(imageUrl);
-        //vo.setContImg("http://121.125.94.188:8000"+imageUrl);
+        //vo.setContImg(imageUrl);
+        vo.setContImg("http://localhost:8081"+imageUrl);
         vo.setCreatedBy("system");
         vo.setUpdatedBy("system");
 

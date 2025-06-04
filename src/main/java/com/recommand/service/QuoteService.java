@@ -35,12 +35,13 @@ public class QuoteService {
 
     public String requestQuote() throws IOException {
         //return requestGpt("외국 위인의 명언 하나를 영어 원문과 번역, 인물 이름 포함해서 알려줘.");
-    	return requestGpt("공백포함 최대 150자 내에서 영어로 된 희망 및 동기부여 관련 글 하나를 title과 quote를 나누어서 json 형태로 알려줘.");
+    	return requestGpt("공백포함 최대 150자 내에서 영어로 된 희망 및 동기부여 관련 글 하나를 기존에 응답했던 거랑 겹치지 않게 다른 title과 quote를 나누어서 json 형태로 알려줘.");
     }
-
+/*
     public String requestImagePrompt(String quote) throws IOException {
-        return requestGpt("이 영화에 어울리는 배경 이미지를 영어로 묘사해줘: " + quote);
-    }
+        //return requestGpt("이 영화에 어울리는 배경 이미지를 영어로 묘사해줘: " + quote);
+    	return requestGpt(quote + " 이 내용과 관련 된 내용으로 2000자 정도 되는 현대시대 배경의 소설을 만들어 줘.");
+    }*/
 
     public String downloadImageFromPexels(String query) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
