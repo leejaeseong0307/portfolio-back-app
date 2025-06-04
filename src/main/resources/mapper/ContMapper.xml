@@ -144,7 +144,9 @@
         long_no AS longNo,
         long_title AS contTitle,
         long_img AS contImg,
-        SUBSTRING(long_detail, 1, 100) AS contDetail
+        <![CDATA[
+        	SUBSTRING(REGEXP_REPLACE(long_detail, '<[^>]*>', ''), 1, 100) AS contDetail
+        ]]>
     FROM 
         tb_content_long
     ORDER BY created_dt DESC
