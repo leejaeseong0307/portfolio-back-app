@@ -27,6 +27,8 @@ public interface ContMapper {
     List<ContVo> selectPagedLongForms(@Param("offset") int offset, @Param("limit") int limit);
     
     void updateLongForm(ContVo contVo);
+    
+    int deleteLongContentById(@Param("longNo") Long longNo);
 
 }
 

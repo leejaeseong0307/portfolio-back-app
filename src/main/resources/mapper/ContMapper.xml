@@ -165,6 +165,10 @@
         long_no = #{longNo}
 </update>
   
+  <delete id="deleteLongContentById">
+    DELETE FROM tb_content_long
+    WHERE long_no = #{longNo}
+</delete>
   
   
 </mapper>

@@ -52,6 +52,11 @@ public class ContService {
     public void updateLongForm(ContVo contVo) {
         contMapper.updateLongForm(contVo);
     }
+    
+    public boolean deleteLongContentById(Long longNo) {
+        int result = contMapper.deleteLongContentById(longNo);
+        return result > 0;
+    }
 
 
 }

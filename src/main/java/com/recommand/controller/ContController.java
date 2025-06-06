@@ -103,32 +103,43 @@ public class ContController {
    	private String uploadDir;
     
     @PostMapping("/upload-image")
-    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image) throws IOException {
+    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image, HttpSession session) throws IOException {
         // 저장 경로 (운영환경에 맞게 수정)
         //String uploadDir = "/home/ubuntu/images"; // 또는 /usr/local/... 같은 실제 경로
-        File folder = new File(uploadDir);
-        if (!folder.exists()) folder.mkdirs();
-
-        // 파일 이름 중복 방지
-        String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, filename);
-
-        // 실제 파일 저장
-        Files.write(filePath, image.getBytes());
-
-        // 클라이언트에게 제공할 URL
-        String imageUrl = "http://localhost:8081/uploads/images/" + filename;
+    	String imageUrl = "";
+    	Object userObj = session.getAttribute("user");
+    	if (userObj != null) {
+	        File folder = new File(uploadDir);
+	        if (!folder.exists()) folder.mkdirs();
+	
+	        // 파일 이름 중복 방지
+	        String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
+	        Path filePath = Paths.get(uploadDir, filename);
+	
+	        // 실제 파일 저장
+	        Files.write(filePath, image.getBytes());
+	
+	        // 클라이언트에게 제공할 URL
+	        //imageUrl = "http://localhost:8081/uploads/images/" + filename;
+	        imageUrl = "/uploads/images/" + filename;
+    	}
 
         return Map.of("url", imageUrl);
     }
     
     @PostMapping("/longform")
-    public ResponseEntity<Map<String, Object>> registerLongForm(@RequestBody ContVo contVo) {
+    public ResponseEntity<Map<String, Object>> registerLongForm(@RequestBody ContVo contVo, HttpSession session) {
+    	
+    	Object userObj = session.getAttribute("user");
+    	
         try {
-        	
-        	contService.saveLongForm(contVo);
-            //return ResponseEntity.ok("등록 성공");
-            return ResponseEntity.ok(Map.of("message", "등록 성공", "id", contVo.getLongNo()));
+        	if (userObj != null) {
+        		contService.saveLongForm(contVo);
+        		//return ResponseEntity.ok("등록 성공");
+                return ResponseEntity.ok(Map.of("message", "등록 성공", "id", contVo.getLongNo()));
+        	}else {
+        		throw new RuntimeException("로그인이 필요합니다.");
+        	}
         } catch (Exception e) {
         	log.error("에러 발생:", e);
             e.printStackTrace();
@@ -162,11 +173,18 @@ public class ContController {
     @PutMapping("/longform/{id}")
     public ResponseEntity<Map<String, Object>> updateLongForm(
             @PathVariable("id") Long longNo,
-            @RequestBody ContVo contVo) {
+            @RequestBody ContVo contVo, HttpSession session) {
+    	
+    	Object userObj = session.getAttribute("user");
+    	
         try {
-            contVo.setLongNo(longNo); // 경로에서 받은 ID를 VO에 세팅
-            contService.updateLongForm(contVo);
-            return ResponseEntity.ok(Map.of("message", "수정 성공", "id", longNo));
+        	if (userObj != null) {
+        		contVo.setLongNo(longNo); // 경로에서 받은 ID를 VO에 세팅
+        		contService.updateLongForm(contVo);
+        		return ResponseEntity.ok(Map.of("message", "수정 성공", "id", longNo));
+        	}else {
+        		throw new RuntimeException("로그인이 필요합니다.");
+        	}
         } catch (Exception e) {
             log.error("수정 중 에러 발생:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -174,6 +192,28 @@ public class ContController {
         }
     }
 
+    @DeleteMapping("/longdel/{longNo}")
+    public ResponseEntity<String> deleteLongContent(@PathVariable("longNo") Long longNo, HttpSession session) {
+    	log.info("DELETE 요청 들어옴: longNo={}", longNo);
+    	
+    	Object userObj = session.getAttribute("user");
+    	try {
+	    	if (userObj != null) {
+		        boolean deleted = contService.deleteLongContentById(longNo);
+		        if (deleted) {
+		            return ResponseEntity.ok("삭제 성공");
+		        } else {
+		            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 콘텐츠를 찾을 수 없습니다.");
+		        }
+	    	}else {
+	    		throw new RuntimeException("로그인이 필요합니다.");
+	    	}
+	    } catch (Exception e) {
+	    	log.error("에러 발생:", e);
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+	    }
+    }
 
 
 }
