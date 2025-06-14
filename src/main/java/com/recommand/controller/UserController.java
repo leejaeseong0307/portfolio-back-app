@@ -122,7 +122,7 @@ public class UserController {
         if (user != null) {
             return ResponseEntity.ok(user); // 사용자 정보 반환
         } else {
-        	session.invalidate();
+        	//session.invalidate();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요");
         }
     }
