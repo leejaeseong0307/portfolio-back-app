@@ -25,14 +25,20 @@ public class SecurityConfig {
             //.requestMatchers("/email/**").permitAll() // 이메일을 통한 인증 허용
             //.requestMatchers("/uploads/images/**").permitAll()
             .requestMatchers(
-                    "/",                 // 루트 URL
-                    "/index.html",       // React 진입점
-                    "/static/**",        // js/css
-                    "/js/**", "/css/**", "/images/**", // 혹시 모를 폴더
+                    "/", 
+                    "/index.html",
+                    "/static/**",
+                    "/js/**", "/css/**", "/images/**",
                     "/favicon.ico",
-                    "/api/**",           // 기존 설정 유지
-                    "/email/**",
-                    "/uploads/images/**"
+                    "/logo192.png", "/manifest.json",
+                    "/uploads/images/**",
+                    "/api/**",
+                    "/api/session",
+                    "/email/**"
+                    ,"/home", "/long", "/longView/**", "/longForm/**", 
+                    "/short", "/profile", "/my", "/register", "/login", 
+                    "/findId", "/findPw", "/terms", "/privacy"//, "/sitemap.xml", "/robots.txt"
+                    //"/**"
                 ).permitAll()
             .anyRequest().authenticated()
         )
