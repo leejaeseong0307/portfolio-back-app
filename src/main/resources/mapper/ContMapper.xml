@@ -117,11 +117,11 @@
     <insert id="insertLongForm" parameterType="com.recommand.vo.ContVo" useGeneratedKeys="true" keyProperty="longNo" keyColumn="long_no">
         INSERT INTO tb_content_long (
         user_id, long_title, long_img, long_detail, long_ganre,
-        long_del, long_act, long_like, long_view,
+        long_del, long_act, long_like, long_view, long_ai,
         created_by, updated_by, created_dt, updated_dt
         ) VALUES (
         #{userId}, #{contTitle}, #{contImg}, #{contDetail}, #{longGanre},
-        'N', 'Y', 0, 0,
+        'N', 'Y', 0, 0, #{longAi},
         #{userId}, #{userId}, NOW(), NOW()
         )
     </insert>
@@ -135,6 +135,7 @@
         long_ganre longGanre,
         long_img contImg,
         long_view contView,
+        long_ai longAi,
         created_dt createdDt
         FROM tb_content_long
         WHERE long_no = #{id}
@@ -161,7 +162,8 @@
         long_title = #{contTitle},
         long_detail = #{contDetail},
         long_img = #{contImg},
-        long_ganre = #{longGanre}
+        long_ganre = #{longGanre},
+        long_ai = #{longAi}
         <!--         season = #{season} -->
         WHERE
         long_no = #{longNo}

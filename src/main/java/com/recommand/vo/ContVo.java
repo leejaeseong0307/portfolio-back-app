@@ -34,4 +34,6 @@ public class ContVo {
     private String longGanre;
     
     private Long longNo;
+
+    private String longAi;
 }
